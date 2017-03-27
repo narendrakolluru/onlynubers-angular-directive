@@ -1,50 +1,3 @@
-app.directive('ngFiles', ['$parse', function($parse) {
-  function fn_link(scope, element, attrs) {
-    var onChange = $parse(attrs.ngFiles);
-    element.on('change', function(event) {
-      onChange(scope, {
-        $files: event.target.files
-      });
-    });
-  };
-  return {
-    link: fn_link
-  }
-}]);
-
-app.directive('loading', function() {
-  return {
-    restrict: 'E',
-    replace: true,
-    template: '<div class="loading"><img src="http://www.nasa.gov/multimedia/videogallery/ajax-loader.gif" width="20" height="20" />LOADING...</div>',
-    link: function(scope, element, attr) {
-      scope.$watch('loading', function(val) {
-        if (val)
-          $(element).show();
-        else
-          $(element).hide();
-      });
-    }
-  }
-})
-
-app.directive('validFile', function() {
-  return {
-    require: 'ngModel',
-    link: function(scope, el, attrs, ctrl) {
-      ctrl.$setValidity('validFile', el.val() != '');
-      //change event is fired when file is selected
-      el.bind('change', function() {
-        ctrl.$setValidity('validFile', el.val() != '');
-        scope.$apply(function() {
-          ctrl.$setViewValue(el.val());
-          ctrl.$render();
-        });
-      });
-    }
-  }
-})
-
 //Only nuber directive
 app.directive("onlyNumber", function () {
     return {
@@ -73,19 +26,3 @@ app.directive("onlyNumber", function () {
     };
 });
 
-
-app.directive('confirmationNeeded', function() {
-  return {
-    priority: 1,
-    terminal: true,
-    link: function(scope, element, attr) {
-      var msg = attr.confirmationNeeded || "Are you sure?";
-      var clickAction = attr.ngClick;
-      element.bind('click', function() {
-        if (window.confirm(msg)) {
-          scope.$eval(clickAction)
-        }
-      });
-    }
-  };
-});
